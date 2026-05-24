@@ -1,5 +1,6 @@
 # Stage 1: Build
 FROM registry.access.redhat.com/ubi8/dotnet-80 AS build
+USER 0
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
