@@ -6,8 +6,8 @@ pool:
 
 variables:
   quayRegistry: 'quay.io'
-  quayRepositoryApi: 'my-org/retail-dashboard-api'
-  quayRepositoryWeb: 'my-org/retail-dashboard-web'
+  quayRepositoryApi: 'devnations-ceaca/retail-api'
+  quayRepositoryWeb: 'devnations-ceaca/retail-web'
   tag: '$(Build.BuildId)'
 
 steps:
