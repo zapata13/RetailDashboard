@@ -29,6 +29,7 @@ steps:
     command: build
     repository: '$(quayRegistry)/$(quayRepositoryApi)'
     dockerfile: 'src/RetailDashboard.Api/Dockerfile'
+    buildContext: '$(Build.SourcesDirectory)'
     tags: |
       $(tag)
 
@@ -38,6 +39,7 @@ steps:
     command: build
     repository: '$(quayRegistry)/$(quayRepositoryWeb)'
     dockerfile: 'src/RetailDashboard.Web/Dockerfile'
+    buildContext: '$(Build.SourcesDirectory)'
     tags: |
       $(tag)
 
