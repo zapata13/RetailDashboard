@@ -1,0 +1,81 @@
+@model IEnumerable<RetailDashboard.Core.Models.SalesData>
+
+@{
+    ViewData["Title"] = "Retail Sales Dashboard";
+}
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-6">Retail Sales Dashboard</h1>
+            <p class="text-muted">Real-time overview of store performance.</p>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning" role="alert">
+            No sales data available. Make sure the API is running and reachable.
+        </div>
+    }
+    else
+    {
+        <div class="row mb-4">
+            <div class="col-md-6 mb-3">
+                <div class="card bg-primary text-white h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Sales</h5>
+                        <h2 class="display-5">@Model.Sum(s => s.TotalSales).ToString("C")</h2>
+                        <p class="card-text">Across all stores</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="card bg-success text-white h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Transactions</h5>
+                        <h2 class="display-5">@Model.Sum(s => s.TotalTransactions).ToString("N0")</h2>
+                        <p class="card-text">Transactions recorded</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        Store Performance
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Store ID</th>
+                                        <th>Store Name</th>
+                                        <th>Date</th>
+                                        <th class="text-end">Transactions</th>
+                                        <th class="text-end">Total Sales</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.OrderByDescending(s => s.Date).ThenByDescending(s => s.TotalSales))
+                                    {
+                                        <tr>
+                                            <td>@item.Id</td>
+                                            <td><strong>@item.StoreName</strong></td>
+                                            <td>@item.Date.ToShortDateString()</td>
+                                            <td class="text-end">@item.TotalTransactions</td>
+                                            <td class="text-end">@item.TotalSales.ToString("C")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

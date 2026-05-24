@@ -1,0 +1,64 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  quayRegistry: 'quay.io'
+  quayRepositoryApi: 'my-org/retail-dashboard-api'
+  quayRepositoryWeb: 'my-org/retail-dashboard-web'
+  tag: '$(Build.BuildId)'
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET 8.0 SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '8.0.x'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build the Solution'
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+
+- task: Docker@2
+  displayName: 'Build Api Container'
+  inputs:
+    command: build
+    repository: '$(quayRegistry)/$(quayRepositoryApi)'
+    dockerfile: 'src/RetailDashboard.Api/Dockerfile'
+    tags: |
+      $(tag)
+
+- task: Docker@2
+  displayName: 'Build Web Container'
+  inputs:
+    command: build
+    repository: '$(quayRegistry)/$(quayRepositoryWeb)'
+    dockerfile: 'src/RetailDashboard.Web/Dockerfile'
+    tags: |
+      $(tag)
+
+- task: Docker@2
+  displayName: 'Login to Quay.io'
+  inputs:
+    command: login
+    containerRegistry: 'QuayServiceConnection' # This needs to be configured in Azure DevOps
+
+- task: Docker@2
+  displayName: 'Push Api Container to Quay.io'
+  inputs:
+    command: push
+    repository: '$(quayRepositoryApi)'
+    tags: |
+      $(tag)
+
+- task: Docker@2
+  displayName: 'Push Web Container to Quay.io'
+  inputs:
+    command: push
+    repository: '$(quayRepositoryWeb)'
+    tags: |
+      $(tag)

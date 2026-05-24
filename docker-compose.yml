@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: src/RetailDashboard.Api/Dockerfile
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    # Uncomment when using Postgres
+    # depends_on:
+    #   - db
+    
+  web:
+    build:
+      context: .
+      dockerfile: src/RetailDashboard.Web/Dockerfile
+    ports:
+      - "5001:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ApiUrl=http://api:8080
+    depends_on:
+      - api
+
+  # Commented out Postgres DB for future use
+  # db:
+  #   image: postgres:15-alpine
+  #   environment:
+  #     POSTGRES_USER: retailuser
+  #     POSTGRES_PASSWORD: retailpassword
+  #     POSTGRES_DB: retaildb
+  #   ports:
+  #     - "5432:5432"
