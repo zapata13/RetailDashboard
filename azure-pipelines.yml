@@ -59,3 +59,26 @@ steps:
     repository: '$(quayRepositoryWeb)'
     tags: |
       $(tag)
+
+# --- GitOps: Update deployment manifests with new image tag ---
+- script: |
+    git clone https://$(GitHubPAT)@github.com/zapata13/RetailDashboardGitops.git
+  displayName: 'Clone GitOps Repository'
+
+- script: |
+    cd RetailDashboardGitops
+    sed -i "s|image: $(quayRegistry)/$(quayRepositoryApi):.*|image: $(quayRegistry)/$(quayRepositoryApi):$(tag)|g" base/retail-api/deployment.yaml
+    sed -i "s|image: $(quayRegistry)/$(quayRepositoryWeb):.*|image: $(quayRegistry)/$(quayRepositoryWeb):$(tag)|g" base/retail-web/deployment.yaml
+    echo "Updated deployment files to tag: $(tag)"
+    cat base/retail-api/deployment.yaml | grep "image:"
+    cat base/retail-web/deployment.yaml | grep "image:"
+  displayName: 'Update Image Tags in Deployments'
+
+- script: |
+    cd RetailDashboardGitops
+    git config user.email "zapata@redhat.com"
+    git config user.name "Eduardo Zapata"
+    git add -A
+    git commit -m "Update image tag to $(tag)"
+    git push
+  displayName: 'Commit and Push to GitOps Repo'
