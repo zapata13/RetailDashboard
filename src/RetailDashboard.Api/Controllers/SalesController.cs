@@ -29,7 +29,8 @@ public class SalesController : ControllerBase
             new SalesData { Id = 5, StoreName = "Downtown Hub", Date = DateTime.UtcNow, TotalSales = 13200.00m, TotalTransactions = 335 },
             new SalesData { Id = 6, StoreName = "Downtown Hub", Date = DateTime.UtcNow, TotalSales = 15000.00m, TotalTransactions = 554 },
             new SalesData { Id = 7, StoreName = "Uptown Mall", Date = DateTime.UtcNow, TotalSales = 9100.50m, TotalTransactions = 225 },
-            new SalesData { Id = 8, StoreName = "Uptown Mall v2", Date = DateTime.UtcNow, TotalSales = 9500.50m, TotalTransactions = 228 }
+            new SalesData { Id = 8, StoreName = "Uptown Mall v2", Date = DateTime.UtcNow, TotalSales = 9500.50m, TotalTransactions = 228 },
+            new SalesData { Id = 9, StoreName = "Uptown Mall v3", Date = DateTime.UtcNow, TotalSales = 9100.50m, TotalTransactions = 225 }
         };
 
         return Ok(mockData);
